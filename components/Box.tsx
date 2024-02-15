@@ -85,6 +85,7 @@ const Box: React.FC<BoxProps> = ({ box, onDelete, selectedItem }) => {
 		>
 			{!isEditing ? (
 				<div className={"flex flex-col"}>
+					{/* TODO: fix font responsiveness in small screens */}
 					<div className={"text-xs"}>{boxText}</div>
 					<div className={"text-xs hidden"}>{boxClass}</div>
 				</div>
