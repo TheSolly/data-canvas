@@ -23,11 +23,8 @@ const ImageCanvas: React.FC = () => {
 	};
 
 	return (
-		<div className='relative'>
-			<img
-				src={`data:image/png;base64,${objectData.base64}`}
-				alt='Object Image'
-			/>
+		<div className={"relative"}>
+			<img src={objectData.base64} alt='Object Image' />
 			{boxes.map((box, index) => (
 				<Box
 					key={index}
@@ -36,7 +33,7 @@ const ImageCanvas: React.FC = () => {
 					onDelete={handleDeleteBox}
 				/>
 			))}
-			<BoxMenu onSave={handleSaveChanges} onCancel={handleCancel} />
+			{/* <BoxMenu onSave={handleSaveChanges} onCancel={handleCancel} /> */}
 		</div>
 	);
 };

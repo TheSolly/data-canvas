@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface BoxProps {
 	box: {
@@ -13,6 +13,7 @@ interface BoxProps {
 const Box: React.FC<BoxProps> = ({ box, onDoubleClick, onDelete }) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [editedText, setEditedText] = useState(box.text);
+	const boxRef = useRef<HTMLDivElement>(null);
 
 	const handleDoubleClick = () => {
 		setIsEditing(true);
@@ -29,14 +30,29 @@ const Box: React.FC<BoxProps> = ({ box, onDoubleClick, onDelete }) => {
 		onDelete(box.points);
 	};
 
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
+				setIsEditing(false);
+			}
+		};
+
+		document.addEventListener("mousedown", handleClickOutside);
+
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, []);
+
 	return (
 		<div
-			className={`absolute border-2 border-${box.class.toLowerCase()} p-2`}
+			ref={boxRef}
+			className={"absolute border-2 rounded-lg bg-white"}
 			style={{
-				left: `${box.points[0]}%`,
-				top: `${box.points[1]}%`,
-				width: `${box.points[2] - box.points[0]}%`,
-				height: `${box.points[3] - box.points[1]}%`,
+				left: `${box.points[0]}px`,
+				top: `${box.points[1]}px`,
+				width: `${box.points[2] - box.points[0]}px`,
+				height: `${box.points[3] - box.points[1]}px`,
 			}}
 			onDoubleClick={handleDoubleClick}
 		>
@@ -48,12 +64,29 @@ const Box: React.FC<BoxProps> = ({ box, onDoubleClick, onDelete }) => {
 						value={editedText}
 						onChange={(e) => setEditedText(e.target.value)}
 					/>
-					<button onClick={handleSave}>Save</button>
-					<button onClick={handleCancel}>Cancel</button>
-					<button onClick={handleDelete}>Delete</button>
+					<div className='flex'>
+						<button
+							className='bg-green-500 text-white font-bold py-1 px-2 rounded mr-2'
+							onClick={handleSave}
+						>
+							Save
+						</button>
+						<button
+							className='bg-red-500 text-white font-bold py-1 px-2 rounded mr-2'
+							onClick={handleCancel}
+						>
+							Cancel
+						</button>
+						<button
+							className='bg-red-500 text-white font-bold py-1 px-2 rounded'
+							onClick={handleDelete}
+						>
+							Delete
+						</button>
+					</div>
 				</div>
 			) : (
-				<div>{box.text}</div>
+				<div className={"text-xs rounded-lg"}>{box.text}</div>
 			)}
 		</div>
 	);
