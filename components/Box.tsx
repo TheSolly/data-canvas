@@ -8,6 +8,7 @@ interface BoxProps {
 		class: string;
 	};
 	onDelete: (boxes: any) => void;
+	selectedItem: number[] | null;
 }
 
 const classToColor: Record<string, string> = {
@@ -19,7 +20,7 @@ const classToColor: Record<string, string> = {
 	Name: "red",
 };
 
-const Box: React.FC<BoxProps> = ({ box, onDelete }) => {
+const Box: React.FC<BoxProps> = ({ box, onDelete, selectedItem }) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [boxText, setBoxText] = useState(box.text);
 	const [boxClass, setBoxClass] = useState(box.class);
@@ -55,6 +56,10 @@ const Box: React.FC<BoxProps> = ({ box, onDelete }) => {
 			setParentHeight(boxRef.current.parentElement.offsetHeight);
 		}
 
+		if (selectedItem && selectedItem === box.points) {
+			setIsEditing(true);
+		}
+
 		return () => {
 			document.removeEventListener("mousedown", handleClickOutside);
 		};
@@ -62,6 +67,7 @@ const Box: React.FC<BoxProps> = ({ box, onDelete }) => {
 		boxRef.current?.parentElement,
 		boxRef.current?.parentElement?.offsetWidth,
 		boxRef.current?.parentElement?.offsetHeight,
+		selectedItem,
 	]);
 
 	return (

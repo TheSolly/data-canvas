@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import Box from "./Box";
 import objectData from "../public/objectData.json";
 
-const ImageCanvas: React.FC = () => {
+type ImageCanvasProps = {
+	selectedItem: number[] | null;
+};
+
+const ImageCanvas: React.FC<ImageCanvasProps> = ({ selectedItem }) => {
 	const [boxes, setBoxes] = useState(objectData.boxes);
 
 	const onDelete = (boxes: any) => {
@@ -18,7 +22,12 @@ const ImageCanvas: React.FC = () => {
 				className='object-cover'
 			/>
 			{boxes.map((box, index) => (
-				<Box key={index} box={box} onDelete={onDelete} />
+				<Box
+					key={index}
+					box={box}
+					onDelete={onDelete}
+					selectedItem={selectedItem}
+				/>
 			))}
 		</div>
 	);
