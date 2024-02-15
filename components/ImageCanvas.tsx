@@ -1,25 +1,13 @@
 import React, { useState } from "react";
 import Box from "./Box";
-import BoxMenu from "./BoxMenu";
 import objectData from "../public/objectData.json";
 
 const ImageCanvas: React.FC = () => {
 	const [boxes, setBoxes] = useState(objectData.boxes);
 
-	const handleBoxDoubleClick = (boxId: number[]) => {
-		// Implement logic to show popup menu for editing text and class
-	};
-
-	const handleSaveChanges = () => {
-		// Implement logic to save changes for the session
-	};
-
-	const handleCancel = () => {
-		// Implement logic to cancel changes for the session
-	};
-
-	const handleDeleteBox = (boxId: number[]) => {
-		// Implement logic to delete a box
+	const onDelete = (boxes: any) => {
+		objectData.boxes = objectData.boxes.filter((b: any) => b.points !== boxes);
+		setBoxes(objectData.boxes);
 	};
 
 	return (
@@ -30,14 +18,8 @@ const ImageCanvas: React.FC = () => {
 				className='object-cover'
 			/>
 			{boxes.map((box, index) => (
-				<Box
-					key={index}
-					box={box}
-					onDoubleClick={handleBoxDoubleClick}
-					onDelete={handleDeleteBox}
-				/>
+				<Box key={index} box={box} onDelete={onDelete} />
 			))}
-			{/* <BoxMenu onSave={handleSaveChanges} onCancel={handleCancel} /> */}
 		</div>
 	);
 };

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import BoxMenu from "./BoxMenu";
 
 interface BoxProps {
 	box: {
@@ -6,13 +7,22 @@ interface BoxProps {
 		text: string;
 		class: string;
 	};
-	onDoubleClick: (boxPoints: number[]) => void;
-	onDelete: (boxPoints: number[]) => void;
+	onDelete: (boxes: any) => void;
 }
 
-const Box: React.FC<BoxProps> = ({ box, onDoubleClick, onDelete }) => {
+const classToColor: Record<string, string> = {
+	Date: "green",
+	Number: "blue",
+	Amount: "orange",
+	Supplier: "purple",
+	Description: "teal",
+	Name: "red",
+};
+
+const Box: React.FC<BoxProps> = ({ box, onDelete }) => {
 	const [isEditing, setIsEditing] = useState(false);
-	const [editedText, setEditedText] = useState(box.text);
+	const [boxText, setBoxText] = useState(box.text);
+	const [boxClass, setBoxClass] = useState(box.class);
 	const [parentWidth, setParentWidth] = useState(1);
 	const [parentHeight, setParentHeight] = useState(1);
 	const boxRef = useRef<HTMLDivElement>(null);
@@ -21,11 +31,10 @@ const Box: React.FC<BoxProps> = ({ box, onDoubleClick, onDelete }) => {
 		setIsEditing(true);
 	};
 	const handleSave = () => {
-		onDoubleClick(box.points);
 		setIsEditing(false);
 	};
 	const handleCancel = () => {
-		setEditedText(box.text);
+		setBoxText(box.text);
 		setIsEditing(false);
 	};
 	const handleDelete = () => {
@@ -58,46 +67,36 @@ const Box: React.FC<BoxProps> = ({ box, onDoubleClick, onDelete }) => {
 	return (
 		<div
 			ref={boxRef}
-			className={"absolute border-2 rounded-lg bg-white"}
+			className={"absolute bg-white border-2 border-solid"}
 			style={{
 				left: `${(box.points[0] / parentWidth) * 100}%`,
 				top: `${(box.points[1] / parentHeight) * 100}%`,
 				width: `${((box.points[2] - box.points[0]) / parentWidth) * 100}%`,
 				height: `${((box.points[3] - box.points[1]) / parentHeight) * 100}%`,
+				borderColor: classToColor[box.class],
 			}}
 			onDoubleClick={handleDoubleClick}
 		>
-			{isEditing ? (
-				<div>
-					<input
-						className='w-full'
-						type='text'
-						value={editedText}
-						onChange={(e) => setEditedText(e.target.value)}
-					/>
-					<div className='flex'>
-						<button
-							className='bg-green-500 text-white font-bold py-1 px-2 rounded mr-2'
-							onClick={handleSave}
-						>
-							Save
-						</button>
-						<button
-							className='bg-red-500 text-white font-bold py-1 px-2 rounded mr-2'
-							onClick={handleCancel}
-						>
-							Cancel
-						</button>
-						<button
-							className='bg-red-500 text-white font-bold py-1 px-2 rounded'
-							onClick={handleDelete}
-						>
-							Delete
-						</button>
-					</div>
-				</div>
+			{!isEditing ? (
+				<>
+					<div className={"text-xs"}>{boxText}</div>
+					<div className={"text-xs hidden"}>{boxClass}</div>
+				</>
 			) : (
-				<div className={"text-xs rounded-lg"}>{box.text}</div>
+				<div
+					className={
+						"mt-10 p-2 bg-white border-2 border-solid border-gray-300 shadow-md rounded-md"
+					}
+					style={{ position: "absolute", zIndex: 10 }}
+				>
+					<BoxMenu
+						onSave={handleSave}
+						onCancel={handleCancel}
+						onDelete={handleDelete}
+						setBoxText={setBoxText}
+						setBoxClass={setBoxClass}
+					/>
+				</div>
 			)}
 		</div>
 	);
