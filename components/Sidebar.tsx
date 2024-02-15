@@ -20,7 +20,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemSelect }) => {
 	};
 
 	return (
-		<aside className='w-1/4 h-full bg-gray-50 p-4 shadow-lg'>
+		<aside className='h-full bg-gray-50 p-4 shadow-lg ml-6'>
 			{Object.keys(ClassTypes).map((classType, index) => (
 				<>
 					<div key={index}>
