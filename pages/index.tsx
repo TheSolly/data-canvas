@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ImageCanvas from "../components/ImageCanvas";
 import Sidebar from "../components/Sidebar";
-import { FaBars } from "react-icons/fa"; // Importing the FaBars icon from react-icons
+import { FaBars } from "react-icons/fa";
 
 const IndexPage: React.FC = () => {
 	const [selectedItem, setSelectedItem] = useState<number[] | null>(null);
@@ -16,6 +16,21 @@ const IndexPage: React.FC = () => {
 		setShowSidebar(!showSidebar);
 		setSelectedItem(null);
 	};
+
+	useEffect(() => {
+		const closeSidebar = () => {
+			console.log(showSidebar);
+			if (showSidebar) {
+				setShowSidebar(false);
+			}
+		};
+
+		document.addEventListener("click", closeSidebar);
+
+		return () => {
+			document.removeEventListener("click", closeSidebar);
+		};
+	}, [showSidebar]);
 
 	return (
 		<main>

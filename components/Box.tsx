@@ -84,10 +84,10 @@ const Box: React.FC<BoxProps> = ({ box, onDelete, selectedItem }) => {
 			onDoubleClick={handleDoubleClick}
 		>
 			{!isEditing ? (
-				<>
+				<div className={"flex flex-col"}>
 					<div className={"text-xs"}>{boxText}</div>
 					<div className={"text-xs hidden"}>{boxClass}</div>
-				</>
+				</div>
 			) : (
 				<div
 					className={

@@ -20,8 +20,12 @@ const BoxMenu: React.FC<BoxMenuProps> = ({
 
 	const handleSave = () => {
 		onSave();
-		setBoxText(editedText);
-		setBoxClass(editedClass);
+		if (editedText) {
+			setBoxText(editedText);
+		}
+		if (editedClass) {
+			setBoxClass(editedClass);
+		}
 	};
 	const handleCancel = () => {
 		onCancel();

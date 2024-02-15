@@ -29,15 +29,21 @@ const Sidebar: React.FC<SidebarProps> = ({ onItemSelect }) => {
 					<div className='ml-4 before:border-l-2 border-gray-300'>
 						{objectData.boxes
 							.filter((box) => box.class === classType)
-							.map((box, index) => (
-								<div
-									className='p-2 hover:bg-gray-100 cursor-pointer'
-									key={index}
-									onClick={() => handleBoxClick(box.points)}
-								>
-									{box.text}
-								</div>
-							))}
+							.map((box, index) => {
+								return (
+									<div
+										className='p-2 hover:bg-gray-100 cursor-pointer'
+										key={index}
+										onClick={() => handleBoxClick(box.points)}
+									>
+										{box.text}
+									</div>
+								);
+							})}
+						{objectData.boxes.filter((box) => box.class === classType)
+							.length === 0 && (
+							<div className='p-2 text-gray-500'>No boxes available</div>
+						)}
 					</div>
 				</>
 			))}
