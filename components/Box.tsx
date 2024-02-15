@@ -13,6 +13,8 @@ interface BoxProps {
 const Box: React.FC<BoxProps> = ({ box, onDoubleClick, onDelete }) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [editedText, setEditedText] = useState(box.text);
+	const [parentWidth, setParentWidth] = useState(1);
+	const [parentHeight, setParentHeight] = useState(1);
 	const boxRef = useRef<HTMLDivElement>(null);
 
 	const handleDoubleClick = () => {
@@ -39,20 +41,29 @@ const Box: React.FC<BoxProps> = ({ box, onDoubleClick, onDelete }) => {
 
 		document.addEventListener("mousedown", handleClickOutside);
 
+		if (boxRef.current?.parentElement) {
+			setParentWidth(boxRef.current.parentElement.offsetWidth);
+			setParentHeight(boxRef.current.parentElement.offsetHeight);
+		}
+
 		return () => {
 			document.removeEventListener("mousedown", handleClickOutside);
 		};
-	}, []);
+	}, [
+		boxRef.current?.parentElement,
+		boxRef.current?.parentElement?.offsetWidth,
+		boxRef.current?.parentElement?.offsetHeight,
+	]);
 
 	return (
 		<div
 			ref={boxRef}
 			className={"absolute border-2 rounded-lg bg-white"}
 			style={{
-				left: `${box.points[0]}px`,
-				top: `${box.points[1]}px`,
-				width: `${box.points[2] - box.points[0]}px`,
-				height: `${box.points[3] - box.points[1]}px`,
+				left: `${(box.points[0] / parentWidth) * 100}%`,
+				top: `${(box.points[1] / parentHeight) * 100}%`,
+				width: `${((box.points[2] - box.points[0]) / parentWidth) * 100}%`,
+				height: `${((box.points[3] - box.points[1]) / parentHeight) * 100}%`,
 			}}
 			onDoubleClick={handleDoubleClick}
 		>

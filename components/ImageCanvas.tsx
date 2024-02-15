@@ -23,8 +23,12 @@ const ImageCanvas: React.FC = () => {
 	};
 
 	return (
-		<div className={"relative"}>
-			<img src={objectData.base64} alt='Object Image' />
+		<div className={"relative max-w-fit h-full"}>
+			<img
+				src={objectData.base64}
+				alt='Object Image'
+				className='object-cover'
+			/>
 			{boxes.map((box, index) => (
 				<Box
 					key={index}
